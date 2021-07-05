@@ -1,0 +1,14 @@
+html 
+    head 
+        title=title 
+    body
+        h1=message 
+        <br>
+        h2=message2
+        button(onClick = "alert()") get
+        
+        block content
+            - var addPrefix = function(str) {
+            -   return 'prefix : ' + str;
+            - }
+            p #{addPrefix('outsider')}
