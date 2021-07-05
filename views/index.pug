@@ -5,10 +5,11 @@ html
         h1=message 
         <br>
         h2=message2
-        button(onClick = "alert()") get
+        input(type="text" name="title" id="input")
+        button(onClick = "addPrefix('test')") get
         
         block content
             - var addPrefix = function(str) {
-            -   return 'prefix : ' + str;
+            -  return 'prefix : ' + str;
             - }
             p #{addPrefix('outsider')}
