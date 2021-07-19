@@ -1,15 +1,17 @@
 <HTML>
     <BODY>
-            <form>
-                <input type="button" value="기계 켜기">
+            <form id="testForm" name="testForm" method="post" action="">
+                <input type="text" value="텍스트" id="ib1">
+                <input type="button" value="기계 켜기" id='btn1' onclick="updateBtn()">
               </form>
               <p>기계가 멈췄습니다.</p>
         <script>
-            var btn = document.querySelector('input');
+            var ib = document.getElementById('ib1');
+            var btn = document.getElementById('btn1');
             var txt = document.querySelector('p');
             
 
-            btn.addEventListener('click', updateBtn);
+            //btn.addEventListener('click', updateBtn);
 
             function updateBtn() {
                 if (btn.value === '기계 켜기') {
@@ -19,6 +21,7 @@
                     btn.value = '기계 켜기';
                     txt.textContent = '기계가 멈췄습니다.';
                 }
+                alert(ib.value);
             }
         </script>
     </BODY>
