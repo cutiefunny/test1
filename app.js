@@ -4,6 +4,15 @@ const port = 3000;
 // const cheerio = require("cheerio");
 const log = console.log;
 
+const bodyparser= require('body-parser');
+const app = express();
+
+app.use(express.static('public'))
+app.use(bodyparser.urlencoded({extended:false}))
+app.use(bodyparser.json())
+app.set('view engine', 'ejs');
+app.engine('html', require('ejs').renderFile);
+
 //("mongodb+srv://cutiefunny:ghks1015@macrodb.srkli.mongodb.net/macroDB?retryWrites=true&w=majority")
 
 const { MongoClient } = require("mongodb");
@@ -32,6 +41,10 @@ async function run() {
       let i=0;
 
       console.log(user);
+
+      (await userList.find().toArray()).forEach(document => {
+         console.log(document)
+      });
     //   (await client.db("macroDB").collections()).forEach(collection => {
     //     //console.log(collection);
     //     console.log(i++);
@@ -46,26 +59,34 @@ async function run() {
   }
   run().catch(console.dir);
 
-const app = express();
+//const app = express();
 var http = require('http');
 var fs = require('fs');
 
-function send404Message(response){ response.writeHead(404,{"Content-Type":"text/plain"}); // 단순한 글자 출력 
-response.write("404 ERROR... "); response.end(); 
-}
+// function send404Message(response){ response.writeHead(404,{"Content-Type":"text/plain"}); // 단순한 글자 출력 
+// response.write("404 ERROR... "); response.end(); 
+// }
 
-function onRequest(request, response){ 
-    if(request.method == 'GET' && request.url == '/'){ 
-        response.writeHead(200,{'Content-Type':'text/html; charset=utf-8'});
+// function onRequest(request, response){ 
+//     if(request.method == 'GET' && request.url == '/'){ 
+//         response.writeHead(200,{'Content-Type':'text/html; charset=utf-8'});
         
-        fs.createReadStream("./index.html").pipe(response);
-    }else {
-        send404Message(response); 
-    }
-}
+//         fs.createReadStream("./index.html").pipe(response);
+//     }else {
+//         send404Message(response); 
+//     }
+// }
 
-http.createServer(onRequest).listen(port);
+app.listen(3000, ()=>{
+    console.log('3000번 포트에 대기중!')
+})
+
+// http.createServer(onRequest).listen(port);
 console.log("server started");
+
+app.get('/index',function(req,res){
+    res.render("index.html",{name:"hello"} );
+ });
 
 //app.set('view engine', 'pug');
 
