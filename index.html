@@ -5,6 +5,24 @@
                 <input type="button" value="기계 켜기" id='btn1' onclick="updateBtn()">
               </form>
               <label>사용자</label>의 <p>기계가 멈췄습니다.</p>
-        <script type="text/javascript" src="test1.js"></script>
+              <p>message</p>
+        <!-- <script type="text/javascript" src="test1.js"></script> -->
+        <script>
+            var ib = document.getElementById('ib1');
+            var btn = document.getElementById('btn1');
+            var txt = document.querySelector('p');
+            var label = document.querySelector('label');
+
+            function updateBtn() {
+                if (btn.value === '기계 켜기') {
+                    btn.value = '기계 끄기';
+                    txt.textContent = '기계가 켜졌습니다!';
+                } else {
+                    btn.value = '기계 켜기';
+                    txt.textContent = '기계가 멈췄습니다.';
+                }
+                label.textContent = ib.value;
+            }
+        </script>
     </BODY>
 </HTML>
