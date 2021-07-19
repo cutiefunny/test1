@@ -4,21 +4,84 @@ const port = 3000;
 // const cheerio = require("cheerio");
 const log = console.log;
 
+//("mongodb+srv://cutiefunny:ghks1015@macrodb.srkli.mongodb.net/macroDB?retryWrites=true&w=majority")
+
+const { MongoClient } = require("mongodb");
+const query = { user: "nyanya.toon" };
+
+
+// Connection URI
+const uri =
+  "mongodb+srv://cutiefunny:ghks1015@macrodb.srkli.mongodb.net/macroDB?retryWrites=true&w=majority";
+// Create a new MongoClient
+const client = new MongoClient(uri);
+
+async function run() {
+    try {
+      // Connect the client to the server
+      await client.connect();
+
+      const database = client.db("macroDB");
+      const userList = database.collection("userList");
+
+      const user = await userList.findOne(query);
+
+      // Establish and verify connection
+      await client.db("macroDB").command({ ping: 1 });
+      console.log("Connected successfully to server");
+      let i=0;
+
+      console.log(user);
+    //   (await client.db("macroDB").collections()).forEach(collection => {
+    //     //console.log(collection);
+    //     console.log(i++);
+    //     console.log(collection.namespace.toString());
+    //     console.log(collection.findOne(query));
+    //   }); 
+
+    } finally {
+      // Ensures that the client will close when you finish/error
+      await client.close();
+    }
+  }
+  run().catch(console.dir);
+
 const app = express();
+var http = require('http');
+var fs = require('fs');
 
-app.set('view engine', 'pug');
+function send404Message(response){ response.writeHead(404,{"Content-Type":"text/plain"}); // 단순한 글자 출력 
+response.write("404 ERROR... "); response.end(); 
+}
 
-app.get('/', function (req, res) {
-    res.render('index', { title: 'Hey'
-                        , message: 'Hello there!'
-                        , message2: 'test'
-                    });
-  });
- 
+function onRequest(request, response){ 
+    if(request.method == 'GET' && request.url == '/'){ 
+        response.writeHead(200,{'Content-Type':'text/html; charset=utf-8'});
+        
+        fs.createReadStream("./index.html").pipe(response);
+    }else {
+        send404Message(response); 
+    }
+}
 
-app.listen(port,function()  {
-    console.log("server started");
-})
+http.createServer(onRequest).listen(port);
+console.log("server started");
+
+//app.set('view engine', 'pug');
+
+// app.get('/', function (req, res) {
+//     res.render('index', { title: 'Hey'
+//                         , message: 'Hello there!'
+//                         , message2: 'test'
+//                     });
+//   });
+// if(request.method == 'GET' && request.url == '/'){ 
+//     response.writeHead(200,{"Content-Type":"text/html"}); 
+// }
+
+// app.listen(port,function()  {
+//     console.log("server started");
+// })
 
 
 // const getHtml = async () => {
