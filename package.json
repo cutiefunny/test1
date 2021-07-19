@@ -11,6 +11,7 @@
     "axios": "^0.21.1",
     "cheerio": "*",
     "express": "^4.17.1",
+    "mongoose": "^5.13.3",
     "pug": "^3.0.2"
   },
   "keywords": [],
