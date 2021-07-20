@@ -65,23 +65,6 @@ async function run() {
   }
   run().catch(console.dir);
 
-function getData(){
-  try {
-    client.connect();
-
-    database = client.db("macroDB");
-    userList = database.collection("userList");
-
-    user = userList.findOne(query);
-    console.log(user.user);
-
-    return user.user;
-    
-  } finally {
-    client.close();
-  }
-}
-
 //const app = express();
 var http = require('http');
 var fs = require('fs');
@@ -110,6 +93,41 @@ console.log("server started");
 app.get('',function(req,res){
     res.render("index.html",{name:name} );
  });
+
+//ajax 부분
+app.get('/getajax', function(req, res, next) {
+  res.render("/ajax");
+});
+
+/* POST 호출 처리 */
+
+app.post('/ajax', function(req, res, next) {
+  console.log('POST 방식으로 서버 호출됨');
+  getData();
+  var msg = req.body.msg;
+  msg = name;
+  res.send({result:true, msg:msg});
+});
+
+async function getData() {
+  try {
+    // Connect the client to the server
+    await client.connect();
+
+    const database = client.db("macroDB");
+    const userList = database.collection("userList");
+
+    const user = await userList.findOne(query);
+
+    //name = user.user;
+    name = "AJAX TEST";
+    return name;
+
+  } finally {
+    await client.close();
+  }
+}
+run().catch(console.dir);
 
 //app.set('view engine', 'pug');
 
