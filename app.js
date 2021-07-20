@@ -13,10 +13,15 @@ app.use(bodyparser.json())
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 
+app.use('/script',express.static(__dirname + "/script"));
+
 //("mongodb+srv://cutiefunny:ghks1015@macrodb.srkli.mongodb.net/macroDB?retryWrites=true&w=majority")
 
 const { MongoClient } = require("mongodb");
 const query = { user: "nyanya.toon" };
+
+let name = "test";
+global.name=name;
 
 
 // Connection URI
@@ -40,7 +45,8 @@ async function run() {
       console.log("Connected successfully to server");
       let i=0;
 
-      console.log(user);
+      console.log(user.user);
+      name = user.user;
 
       (await userList.find().toArray()).forEach(document => {
          console.log(document)
@@ -58,6 +64,23 @@ async function run() {
     }
   }
   run().catch(console.dir);
+
+function getData(){
+  try {
+    client.connect();
+
+    database = client.db("macroDB");
+    userList = database.collection("userList");
+
+    user = userList.findOne(query);
+    console.log(user.user);
+
+    return user.user;
+    
+  } finally {
+    client.close();
+  }
+}
 
 //const app = express();
 var http = require('http');
@@ -84,8 +107,8 @@ app.listen(3000, ()=>{
 // http.createServer(onRequest).listen(port);
 console.log("server started");
 
-app.get('/index',function(req,res){
-    res.render("index.html",{name:"hello"} );
+app.get('',function(req,res){
+    res.render("index.html",{name:name} );
  });
 
 //app.set('view engine', 'pug');
