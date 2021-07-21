@@ -29,45 +29,44 @@ const uri =
   "mongodb+srv://cutiefunny:ghks1015@macrodb.srkli.mongodb.net/macroDB?retryWrites=true&w=majority";
 // Create a new MongoClient
 const client = new MongoClient(uri);
+client.connect();
 
-async function run() {
-    try {
-      // Connect the client to the server
-      await client.connect();
+// async function run() {
+//     try {
+//       // Connect the client to the server
+//       await client.connect();
 
-      const database = client.db("macroDB");
-      const userList = database.collection("userList");
+//       const database = client.db("macroDB");
+//       const userList = database.collection("userList");
 
-      const user = await userList.findOne(query);
+//       const user = await userList.findOne(query);
 
-      // Establish and verify connection
-      await client.db("macroDB").command({ ping: 1 });
-      console.log("Connected successfully to server");
-      let i=0;
+//       // Establish and verify connection
+//       await client.db("macroDB").command({ ping: 1 });
+//       console.log("Connected successfully to server");
+//       let i=0;
 
-      console.log(user.user);
-      name = user.user;
+//       console.log(user.user);
+//       name = user.user;
 
-      (await userList.find().toArray()).forEach(document => {
-         console.log(document)
-      });
-    //   (await client.db("macroDB").collections()).forEach(collection => {
-    //     //console.log(collection);
-    //     console.log(i++);
-    //     console.log(collection.namespace.toString());
-    //     console.log(collection.findOne(query));
-    //   }); 
+//       (await userList.find().toArray()).forEach(document => {
+//          console.log(document)
+//       });
 
-    } finally {
-      // Ensures that the client will close when you finish/error
-      await client.close();
-    }
-  }
-  run().catch(console.dir);
+//     } finally {
+//       // Ensures that the client will close when you finish/error
+//       await client.close();
+//     }
+//   }
+//   run().catch(console.dir);
 
 //const app = express();
-var http = require('http');
-var fs = require('fs');
+
+// var http = require('http');
+// var fs = require('fs');
+// const { assert } = require('console');
+// const { response } = require('express');
+// const { promiseImpl } = require('ejs');
 
 // function send404Message(response){ response.writeHead(404,{"Content-Type":"text/plain"}); // 단순한 글자 출력 
 // response.write("404 ERROR... "); response.end(); 
@@ -103,31 +102,24 @@ app.get('/getajax', function(req, res, next) {
 
 app.post('/ajax', function(req, res, next) {
   console.log('POST 방식으로 서버 호출됨');
-  getData();
   var msg = req.body.msg;
-  msg = name;
+
+  getData("echo").then((result) => msg=result);
+  console.log(msg);
+  
+  //msg = name;
   res.send({result:true, msg:msg});
 });
 
-async function getData() {
-  try {
-    // Connect the client to the server
-    await client.connect();
+async function getData(req){
 
-    const database = client.db("macroDB");
-    const userList = database.collection("userList");
+    var database = client.db("macroDB");
+    var userList = database.collection("userList");
+  
+    user = await userList.findOne({ user: "4059cho" });
 
-    const user = await userList.findOne(query);
-
-    //name = user.user;
-    name = "AJAX TEST";
-    return name;
-
-  } finally {
-    await client.close();
-  }
+    return req+user;
 }
-run().catch(console.dir);
 
 //app.set('view engine', 'pug');
 
