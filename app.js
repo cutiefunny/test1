@@ -23,7 +23,6 @@ const query = { user: "nyanya.toon" };
 let name = "test";
 global.name=name;
 
-
 // Connection URI
 const uri =
   "mongodb+srv://cutiefunny:ghks1015@macrodb.srkli.mongodb.net/macroDB?retryWrites=true&w=majority";
@@ -53,22 +52,26 @@ app.post('/ajax', function(req, res, next) {
   console.log('POST 방식으로 서버 호출됨');
   //var msg = req.body.msg;
 
-  getData(req.body.msg).then((msg) => res.send({result:true, msg:msg}));
-                 //.then((msg) => console.log(msg));
-                 //.then(res.send({result:true, msg:msg}));
-  //console.log(msg);
-  
-  //msg = name;
-  //res.send({result:true, msg:msg});
+  getData(req.body.msg).then((msg) => console.log(msg));
+  //.then((msg) => res.send({result:true, msg:msg}));
+
 });
 
 async function getData(req){
 
     var database = client.db("macroDB");
     var userList = database.collection("userList");
-  
-    user = await userList.findOne({ user: {$regex:req} });
-    return user.user;
+    
+    //user = await userList.findOne({ user: {$regex:req} });
+    users = await userList.find({ user: {$regex:req} });
+
+    var list = "";
+    users.forEach(element => {
+      list=element.user;
+      console.log(element.user);
+    });
+    return list;
+    //return user.user;
 }
 
 //app.set('view engine', 'pug');
