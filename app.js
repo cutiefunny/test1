@@ -7,18 +7,19 @@ const log = console.log;
 const bodyparser= require('body-parser');
 const app = express();
 
-app.use(express.static('public'))
+app.use(express.static(__dirname + '/public/'))
 app.use(bodyparser.urlencoded({extended:false}))
 app.use(bodyparser.json())
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 
 app.use('/script',express.static(__dirname + "/script"));
+app.use('/views',express.static(__dirname + "/views"));
 
 //("mongodb+srv://cutiefunny:ghks1015@macrodb.srkli.mongodb.net/macroDB?retryWrites=true&w=majority")
 
 const { MongoClient } = require("mongodb");
-const query = { user: "nyanya.toon" };
+//const query = { user: "nyanya.toon" };
 
 let name = "test";
 global.name=name;
@@ -52,23 +53,25 @@ app.post('/ajax', function(req, res, next) {
   console.log('POST 방식으로 서버 호출됨');
   //var msg = req.body.msg;
 
-  getData(req.body.msg).then((msg) => console.log(msg));
-  //.then((msg) => res.send({result:true, msg:msg}));
+  getData(req.body.msg)//.then((msg) => console.log(msg));
+                      .then((msg) => {
+                        console.log(msg);
+                        res.send({result:true, msg:msg});
+                      });
 
 });
 
 async function getData(req){
 
     var database = client.db("macroDB");
-    var userList = database.collection("userList");
-    
+    var userList = database.collection("whiteList");
     //user = await userList.findOne({ user: {$regex:req} });
-    users = await userList.find({ user: {$regex:req} });
+    users = await userList.find({ name: {$regex:req} }).toArray();
 
-    var list = "";
+    var list = [];
     users.forEach(element => {
-      list=element.user;
-      console.log(element.user);
+      list.push(element.name);
+      //console.log(list);
     });
     return list;
     //return user.user;

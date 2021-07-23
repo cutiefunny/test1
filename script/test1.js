@@ -1,4 +1,5 @@
 
+
 var ib = document.getElementById('ib1');
 var btn = document.getElementById('btn1');
 var txt = document.querySelector('p');
@@ -25,7 +26,11 @@ function ajaxTest() {
         success: function(result) {          //성공했을 때 함수 인자 값으로 결과 값 나옴
 
             if ( result['result'] == true ) {
-                result1.textContent = result['msg'];
+                result1.textContent="";
+                result['msg'].forEach(element => {
+                    result1.textContent+=(element+"<br />");
+                });
+                //request.setAttribute("arr", result['msg']);
             }
 
         } //function끝
