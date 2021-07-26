@@ -47,6 +47,18 @@ app.get('/getajax', function(req, res, next) {
   res.render("/ajax");
 });
 
+app.get('/getajax2', function(req, res, next) {
+  res.render("/ajax2");
+});
+
+app.get('/setajax', function(req, res, next) {
+  res.render("/insert");
+});
+
+app.get('/delajax', function(req, res, next) {
+  res.render("/delete");
+});
+
 /* POST 호출 처리 */
 
 app.post('/ajax', function(req, res, next) {
@@ -54,6 +66,38 @@ app.post('/ajax', function(req, res, next) {
   //var msg = req.body.msg;
 
   getData(req.body.msg)//.then((msg) => console.log(msg));
+                      .then((msg) => {
+                        console.log(msg);
+                        res.send({result:true, msg:msg});
+                      });
+
+});
+
+app.post('/ajax2', function(req, res, next) {
+  console.log('POST 방식으로 서버 호출됨');
+  //var msg = req.body.msg;
+
+  getData2(req.body.msg)//.then((msg) => console.log(msg));
+                      .then((msg) => {
+                        console.log(msg);
+                        res.send({result:true, msg:msg});
+                      });
+
+});
+
+app.post('/insert', function(req, res, next) {
+
+  setData(req.body.msg)//.then((msg) => console.log(msg));
+                      .then((msg) => {
+                        console.log(msg);
+                        res.send({result:true, msg:msg});
+                      });
+
+});
+
+app.post('/delete', function(req, res, next) {
+
+  delData(req.body.msg)//.then((msg) => console.log(msg));
                       .then((msg) => {
                         console.log(msg);
                         res.send({result:true, msg:msg});
@@ -70,11 +114,54 @@ async function getData(req){
 
     var list = [];
     users.forEach(element => {
-      list.push(element.name);
+      if(!list.includes(element.name)) list.push(element.name);
       //console.log(list);
     });
     return list;
     //return user.user;
+}
+
+async function getData2(req){
+
+  var database = client.db("macroDB");
+  var userList = database.collection("history");
+  //user = await userList.findOne({ user: {$regex:req} });
+  users = await userList.find({ userName: {$regex:req} }).toArray();
+
+  var list = [];
+  users.forEach(element => {
+    if(!list.includes(element.contents.split('#')[0])) {
+      var strArray = element.contents.split('#');
+      list.push(strArray[0]);
+    }
+    //console.log(list);
+  });
+  return list;
+  //return user.user;
+}
+
+async function setData(req){
+
+  var database = client.db("macroDB");
+  var userList = database.collection("whiteList");
+  var doc = { name : req, lastDate : "20210726" };
+  //user = await userList.findOne({ user: {$regex:req} });
+  userList.insertOne(doc);
+
+  return req;
+  //return user.user;
+}
+
+async function delData(req){
+
+  var database = client.db("macroDB");
+  var userList = database.collection("whiteList");
+  var doc = { name : req };
+  //user = await userList.findOne({ user: {$regex:req} });
+  userList.deleteOne(doc);
+
+  return req;
+  //return user.user;
 }
 
 //app.set('view engine', 'pug');

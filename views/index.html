@@ -8,13 +8,25 @@
     </head>
     <BODY>
             <form id="testForm" name="testForm" method="post" action="">
-                <input type="text" value="a" id="ib1">
-                <input type="button" value="기계 켜기" id='btn1' onclick="updateBtn()">
+                <input type="text" value="a" id="ib1"><input type="text" value="insert" id="ib2">
                 <br>
                 <input type="button" value="ajax test" id='ajax_test' onclick="ajaxTest()">
-                <div id="result"></div>
-              
-              <label>사용자</label>의 <p>기계가 멈췄습니다.</p>
+                <input type="button" value="insert test" id='insert_test' onclick="insertTest()">
+                <input type="button" value="delete test" id='delete_test' onclick="deleteTest()">
+                <br>
+              <select id="userID" style="overflow:hidden">
+                  <option value="">userID</option>
+              </select>
+              <select id="userContents" style="overflow:hidden">
+                <option value="">userContents</option>
+            </select>
+            <br>
+            
+            <br>
+            <!-- LightWidget WIDGET
+            <script src="https://cdn.lightwidget.com/widgets/lightwidget.js"></script>
+            <iframe src="//lightwidget.com/widgets/65de2991b16c5d158a2e7908ba1b6f28.html" scrolling="no" allowtransparency="true" class="lightwidget-widget" style="width:100%;border:0;overflow:hidden;">
+            </iframe>  -->
             </form>
 
             
